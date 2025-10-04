@@ -61,6 +61,13 @@
     <p>
       Enter a command, and the AI will generate and run the Python code for you.
     </p>
+    <label for="language-select">Select Language:</label>
+    <select id="language-select" name="language">
+      <option value="Python">Python</option>
+      <option value="JavaScript">JavaScript</option>
+      <option value="C++">C++</option>
+      <option value="Java">Java</option>
+    </select>
     <textarea
       id="prompt"
       rows="3"
@@ -80,6 +87,13 @@
         const promptText = document.getElementById("prompt").value;
         const codeOutput = document.getElementById("code-output");
         const runOutput = document.getElementById("run-output");
+        const languageSelect = document.getElementById('language-select');
+
+        const selectedLanguage = languageSelect.value;
+        if (!promptText.trim()) {
+          alert("Please enter a prompt.");
+          return;
+        }
 
         codeOutput.innerText = "Generating code...";
         runOutput.innerText = "Executing...";
@@ -88,7 +102,10 @@
           const response = await fetch("/generate-and-run", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: promptText }),
+            body: JSON.stringify({
+              prompt: promptText,
+              language: languageSelect.value
+            }),
           });
 
           const data = await response.json();
