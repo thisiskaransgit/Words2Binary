@@ -1,6 +1,8 @@
 # Words2Binary
 Natural Language to Code Generator 🗣️➡️💻
 
+<img width="1366" height="692" alt="Screenshot from 2025-10-05 23-45-45" src="https://github.com/user-attachments/assets/40b283c6-2d5d-4616-aba2-dca3fed5fa43" />
+
 ## What is Words2Binary?
 
 Words2Binary is a web application that lets you turn plain English instructions into real, working computer code. Just type what you want the computer to do (for example, "calculate the factorial of 5"), pick your favorite programming language (like Python, C++, or Java), and the app will generate the code and even run it for you—showing you the result instantly.
