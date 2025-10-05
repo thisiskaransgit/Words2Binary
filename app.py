@@ -34,8 +34,7 @@ LANGUAGE_CONFIG = {
 }
 
 ALLOWED_MODELS = [
-    "llama-4-scout-17b-16e-instruct", "llama-4-maverick-17b-128e-instruct", "gpt-oss-120b", "qwen-3-32b", 
-    "qwen-3-235b-a22b-instruct-2507", "qwen-3-235b-a22b-thinking-2507", "qwen-3-coder-480b", "llama3.1-8b", "llama-3.3-70b"
+    "gpt-oss-120b"
 ]
 def create_prompt(language, user_prompt):
     """Creates a prompt that instructs the AI to return a JSON object."""
