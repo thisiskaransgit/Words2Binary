@@ -33,6 +33,10 @@ LANGUAGE_CONFIG = {
     }
 }
 
+ALLOWED_MODELS = [
+    "llama-4-scout-17b-16e-instruct", "llama-4-maverick-17b-128e-instruct", "gpt-oss-120b", "qwen-3-32b", 
+    "qwen-3-235b-a22b-instruct-2507", "qwen-3-235b-a22b-thinking-2507", "qwen-3-coder-480b", "llama3.1-8b", "llama-3.3-70b"
+]
 def create_prompt(language, user_prompt):
     """Creates a prompt that instructs the AI to return a JSON object."""
     
@@ -48,7 +52,7 @@ def create_prompt(language, user_prompt):
         f"Based on the user's request to '{user_prompt}', "
         f"generate a complete and executable script in {language}. "
         f"You MUST respond with a single JSON object that strictly follows this structure: {json_structure_prompt}. "
-        "Do not include any other text or markdown formatting outside of the JSON object."
+        f"Do not include any additional text, comments, or explanations outside of the JSON object. The JSON object must contain the generated code and a brief explanation."
     )
 
 
@@ -63,7 +67,9 @@ def generate_and_run():
     data = request.get_json()
     user_prompt = data.get('prompt')
     language = data.get('language', 'python').lower()
-
+    selected_model = data.get('model', 'Qwen3-480B (Coder)')
+    if selected_model not in ALLOWED_MODELS:
+        return jsonify({"error": f"Unsupported model: {selected_model}"}), 400
     if not user_prompt:
         return jsonify({"error": "Prompt is missing"}), 400
 
@@ -77,7 +83,7 @@ def generate_and_run():
         prompt_for_ai = config["prompt"].format(prompt=user_prompt)
         
         chat_completion = client.chat.completions.create(
-            model="gpt-oss-120b",  # TODO: Support dynamic model selection based on user input or config.
+            model=selected_model,  # TODO: Support dynamic model selection based on user's input complexity.
             messages=[{"role": "user", "content": prompt_for_ai}],
             response_format={"type": "json_object"},
             max_tokens=500,
@@ -89,7 +95,7 @@ def generate_and_run():
         if not code_to_run:
             return jsonify({"error": "AI did not return any code."}), 500
         # testing 
-        # print("Generated Code:\n", code_to_run)  
+        # print("Generated Code:\n", code_to_run)
 
     except Exception as e:
         return jsonify({"error": "Failed to generate code via API", "details": str(e)}), 500
@@ -110,6 +116,7 @@ def generate_and_run():
         "generated_code": code_to_run,
         "execution_result": result
     })
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
