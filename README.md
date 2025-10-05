@@ -65,7 +65,7 @@ pip install -r requirements.txt
 ```
 6. go to judge0 directory and Start Judge0 container
 ```bash
-cd jugge0-v1.13.1 && docker-compose up -d
+cd judge0-v1.13.1 && docker-compose up -d
 ```
 
 This will start the Judge0 code execution engine in a secure container.
